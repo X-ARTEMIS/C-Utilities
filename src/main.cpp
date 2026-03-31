@@ -118,6 +118,20 @@ class app {
             }
 	    }
 
+        int random() {
+            int random = 0;
+            int max;
+            int min;
+
+            srand(time(nullptr));
+            std::cout << "Enter the maximum number\n";
+            std::cin >> max;
+            std::cout << "Enter the minimum number\n";
+            std::cin >> min;
+
+            return rand() % (max - min + 1) + min;
+        }
+
         void run() {
             std::string choice;
             bool running = true;
@@ -245,6 +259,10 @@ class app {
                     else {
                         std::cout << "Not a directory\n";
                     }
+                }
+
+                else if (choice == "random") {
+                    std::cout << random() << '\n';
                 }
 
                 else if (choice == "clear") {
