@@ -258,7 +258,10 @@ class app {
 };
 
 int main() {
+	std::cout << "C-Utilities\n";
+	std::cout << "======================================\n";
 	app main;
 	main.run();
+	std::cout << "======================================\n";
     return 0;
 }
