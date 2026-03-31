@@ -10,7 +10,7 @@
 class app {
     public:
         struct {
-
+            // help template NAME\nPARAMETERS {e}\nDdescription\n\n optionally additional info after description but ensure double \n at end ADDITIONAL INFORMATION
         } help1;
 
         struct {
@@ -20,14 +20,15 @@ class app {
 	    void letterFrequency() {
             std::string user_input;
             std::string txt;
+            std::string letterfreqfile;
             int amount;
             char alphabet[] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m',
                                'n','o','p','q','r','s','t','u','v','w','x','y','z' };
             std::vector<int> frequency;
 
-            std::cout << "*****************" << std::endl;
-            std::cout << "Letter Frequency Detector" << std::endl;
-            std::cout << "Enter your message" << std::endl;
+            std::cout << "*****************" << '\n';
+            std::cout << "Letter Frequency Detector" << '\n';
+            std::cout << "Enter your message" << '\n';
 
             getline(std::cin, user_input);
 
@@ -43,28 +44,32 @@ class app {
                     }
                 }
 
-                std::cout << alphabet[i] << ": " << amount << std::endl;
+                std::cout << alphabet[i] << ": " << amount << '\n';
                 frequency.push_back(amount);
             }
-            std::cout << "Do you wish to save this to a text file? (y/n)" << std::endl;
+            std::cout << "Do you wish to save this to a text file? (y/n)\n";
             std::cin >> txt;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::transform(txt.begin(), txt.end(), txt.begin(), [](unsigned char c) { return std::tolower(c); });
             if (txt == "y") {
-                srand(time(nullptr));
-
                 char* userProfile = nullptr;
                 size_t len = 0;
                 if (_dupenv_s(&userProfile, &len, "USERPROFILE") == 0 && userProfile != nullptr) {
-                    std::string path = std::string(userProfile) + "\\Downloads\\frequency" + std::to_string(rand()) + ".txt";
+                    std::cout << "Enter a name for your file\n";
+                    std::getline(std::cin, letterfreqfile);
+                    std::string path = std::string(userProfile) + "\\Downloads\\frequency_" + letterfreqfile + ".txt";
                     std::ofstream file(path);
 
                     if (!file) {
-                        std::cerr << "couldn't make file";
+                        std::cerr << "couldn't create file";
                         free(userProfile);
                     }
 
-                    for (int i = 0; i < 26; i++) {
-                        file << alphabet[i] << ": " << frequency[i] << std::endl;
+                    else {
+                        for (int i = 0; i < 26; i++) {
+                            file << alphabet[i] << ": " << frequency[i] << std::endl;
+                        }
+                        std::cout << path << '\n';
                     }
 
                     file.close();
@@ -258,10 +263,7 @@ class app {
 };
 
 int main() {
-	std::cout << "C-Utilities\n";
-	std::cout << "======================================\n";
 	app main;
 	main.run();
-	std::cout << "======================================\n";
     return 0;
 }
