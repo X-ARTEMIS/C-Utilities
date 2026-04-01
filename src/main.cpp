@@ -70,10 +70,10 @@ class app {
                             file << alphabet[i] << ": " << frequency[i] << std::endl;
                         }
                         std::cout << path << '\n';
-                    }
 
-                    file.close();
-                    free(userProfile);
+                        file.close();
+                        free(userProfile);
+                    }
                 }
             }
 
@@ -113,6 +113,7 @@ class app {
                     }
                 }
             }
+
             for (int number : array) {
                 std::cout << number << std::endl;
             }
@@ -267,6 +268,15 @@ class app {
 
                 else if (choice == "clear") {
                     std::system("cls");
+                }
+
+                else if (choice == "delete") {
+                    std::string delpath;
+
+                    std::cout << "Enter the path to the file you wish to delete\n";
+                    std::cin >> delpath;
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::filesystem::remove(delpath);
                 }
 
                 else if (choice == "exit") {
