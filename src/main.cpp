@@ -17,7 +17,7 @@ class app {
 
         } help2;
 
-	    void letterFrequency() {
+        void letterFrequency() {
             std::string user_input;
             std::string txt;
             std::string letterfreqfile;
@@ -80,9 +80,9 @@ class app {
             else {
                 std::cerr << "bye";
             }
-	    }
+        }
 
-	    void bubbleSort() {
+        void bubbleSort() {
             int temp;
             bool inputting = true;
 
@@ -117,7 +117,7 @@ class app {
             for (int number : array) {
                 std::cout << number << std::endl;
             }
-	    }
+        }
 
         int random() {
             int random = 0;
@@ -128,7 +128,7 @@ class app {
             std::cout << "Enter the maximum number\n";
             std::cin >> max;
             std::cout << "Enter the minimum number\n";
-            std::cin >> min;
+            std::cin >> min; 
 
             return rand() % (max - min + 1) + min;
         }
@@ -137,7 +137,7 @@ class app {
             std::string choice;
             bool running = true;
 
-            while (running) {
+            while (running) { 
                 std::cout << "Enter a command (help for list)\n";
                 std::getline(std::cin, choice);
                 std::transform(choice.begin(), choice.end(), choice.begin(), [](unsigned char c) { return std::tolower(c); });
@@ -255,7 +255,7 @@ class app {
                         for (const auto& file : std::filesystem::directory_iterator(pathList)) {
                             std::cout << file << '\n';
                         }
-                    }
+                    } 
                     
                     else {
                         std::cout << "Not a directory\n";
@@ -272,17 +272,36 @@ class app {
 
                 else if (choice == "delete") {
                     std::string delpath;
+                    std::string delChoice;
 
                     std::cout << "Enter the path to the file you wish to delete\n";
                     std::cin >> delpath;
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    std::filesystem::remove(delpath);
+                    if (std::filesystem::exists(delpath)) {
+                        std::cout << "Are you sure you wish to delete " << delpath << '\n';
+                        std::cin >> delChoice;
+                        if (delChoice == "yes") {
+                            std::filesystem::remove(delpath);
+                            if (!std::filesystem::exists(delpath)) {
+                                std::cout << "Sucessfully deleted file\n";
+                            }
+
+                            else {
+                                std::cout << "Failed to delete file\n";
+                            }
+                        }
+                    }
+                    
+                    else {
+                        std::cout << "Unable to find file\n";
+                    }
+                    std::filesystem::remove(delpath);  
                 }
 
                 else if (choice == "exit") {
                     running = false;
                 }
-
+                 
                 else {
                     std::cout << "Invalid command\n";
                 }
@@ -291,7 +310,7 @@ class app {
 };
 
 int main() {
-	app main;
-	main.run();
+    app main;
+    main.run();
     return 0;
 }
