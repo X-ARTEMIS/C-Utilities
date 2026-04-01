@@ -290,6 +290,10 @@ class app {
                                 std::cout << "Failed to delete file\n";
                             }
                         }
+
+                        else {
+                            std::cout << "Deletion cancelled\n";
+                        }
                     }
                     
                     else {
