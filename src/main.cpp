@@ -6,8 +6,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <filesystem>
+#include <cctype>
 
-class app {
+class generic {
     public:
         struct {
             // help template NAME\nPARAMETERS {e}\nDdescription\n\n optionally additional info after description but ensure double \n at end ADDITIONAL INFORMATION
@@ -272,15 +273,16 @@ class app {
 
                 else if (choice == "delete") {
                     std::string delpath;
-                    std::string delChoice;
+                    char delChoice;
 
                     std::cout << "Enter the path to the file you wish to delete\n";
                     std::cin >> delpath;
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     if (std::filesystem::exists(delpath)) {
-                        std::cout << "Are you sure you wish to delete " << delpath << '\n';
+                        std::cout << "Are you sure you wish to delete " << delpath << " (Y/N)" << '\n';
                         std::cin >> delChoice;
-                        if (delChoice == "yes") {
+                        delChoice = std::tolower(static_cast<unsigned char>(delChoice));
+                        if (delChoice == 'y') {
                             std::filesystem::remove(delpath);
                             if (!std::filesystem::exists(delpath)) {
                                 std::cout << "Sucessfully deleted file\n";
@@ -314,7 +316,10 @@ class app {
 };
 
 int main() {
-    app main;
+    std::cout << "C++ Utilities\n";
+    std::cout << "===================================================";
+    generic main;
     main.run();
+    std::cout << "===================================================";
     return 0;
 }
