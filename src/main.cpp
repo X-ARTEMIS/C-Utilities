@@ -36,7 +36,7 @@ public:
                 std::getline(std::cin, newPath);
 
                 if (std::filesystem::exists(newPath)) {
-                    std::cout << "File already exists, this will cause undefined behavior. Are you sure you wish to continue? (Y/N) \n";
+                    std::cout << "File already exists, this will cause undefined behavior. Are you sure you wish to continue? (Y/N) \n"; // I broke this somehow
                     std::cin >> choice;
                     choice = tolower(choice); // I don't think two static_casts is necessary here
 
@@ -444,7 +444,7 @@ public:
 
                     std::cout << fileName << " created at " << fileName + ".txt" << " with text " << textReport << " (" << text.length() - textReport.length() << " excluded)";
                 }
-
+                 
                 else {
                     std::cout << fileName << " created at " << fileName + ".txt" << "with text" << text;
                 }
