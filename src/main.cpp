@@ -1,12 +1,14 @@
-#include <string>
 #include <iostream>
-#include <algorithm>
-#include <vector>
+#include <string>
 #include <fstream>
+#include <algorithm>
+#include <cctype>
+#include <filesystem>
+#include <limits>
 #include <cstdlib>
 #include <ctime>
-#include <filesystem>
-#include <cctype>
+#include <vector>
+
 
 class generic {
     public:
@@ -18,6 +20,237 @@ class generic {
 
         } help2;
 
+		void fileManage() {
+			while (true)
+			{
+				std::string command;
+				std::cout << "* ";
+				std::cin >> command;
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+				if (command == "new") {
+					std::string newPath;
+					char choice;
+
+					std::cout << "Enter your new path\n";
+					std::getline(std::cin, newPath);
+
+					std::ofstream createFile(newPath);
+					if (std::filesystem::exists(newPath)) {
+						std::cout << "File already exists, this will cause undefined behavior. Are you sure you wish to continue? (Y/N) \n";
+						std::cin >> choice;
+						choice = tolower(choice);
+
+						if (choice == 'y') {
+							std::ofstream createFile(newPath);
+							if (createFile.is_open()) {
+								std::cout << "Successfully created file at " << newPath << '\n';
+								createFile.close();
+							}
+
+							else {
+								std::cout << "Failed to create file\n";
+							}
+						}
+
+						else if (choice == 'n') {
+							std::cout << "Cancelled creation\n";
+						}
+
+						else {
+							std::cout << "Invalid response, creation cancelled\n";
+						}
+					}
+				}
+
+				else if (command == "delete") {
+					std::string delpath;
+					std::getline(std::cin, delpath);
+
+					if (std::filesystem::exists(delpath)) {
+						if (std::filesystem::remove(delpath)) {
+							std::cout << "Sucessfully removed " << delpath << '\n';
+						}
+
+						else {
+							std::cout << "Failed to remove " << delpath << " or file did not exist\n";
+						}
+					}
+				}
+
+				else if (command == "copy") {
+					std::string path;
+					std::string targetPath;
+
+					std::cout << "Enter a path for your new file\n";
+					getline(std::cin, path);
+					if (std::filesystem::exists(path)) {
+						if (std::filesystem::is_regular_file(path)) {
+							std::cout << "Enter a target path";
+							std::getline(std::cin, targetPath);
+							std::filesystem::copy(path, targetPath);
+
+							if (std::filesystem::exists(targetPath)) {
+								std::cout << "Sucessfully copied file\n";
+							}
+
+							else {
+								std::cout << "Failed to copy file\n";
+							}
+						}
+
+						else {
+							std::cout << "Not a valid file\n";
+						}
+					}
+
+					else {
+						std::cout << "Unable to locate file\n";
+					}
+				}
+
+				else if (command == "cut") {
+					std::string cutFile;
+					std::string cutFileTarget;
+					char choice;
+
+					std::cout << "Enter the path of the file you wish to move\n";
+					std::getline(std::cin, cutFile);
+
+					if (std::filesystem::exists(cutFile) && std::filesystem::is_regular_file(cutFile)) {
+						std::cout << "Enter the target path\n";
+						std::getline(std::cin, cutFileTarget);
+
+						if (!std::filesystem::exists(cutFileTarget)) {
+						bandaid_fix:
+							std::cout << "Continuing may cause undefined behavior, are you sure you wish to continue?\n";
+							std::cin >> choice;
+							choice = tolower(choice);
+
+							if (choice == 'y') {
+								std::filesystem::copy(cutFile, cutFileTarget);
+
+								if (std::filesystem::exists(cutFileTarget)) {
+									std::cout << "Successfully copied " << cutFile << " to " << cutFileTarget << '\n';
+									if (!std::filesystem::remove(cutFile)) {
+										std::cout << "Failed to remove original file at " << cutFile << '\n';
+									}
+								}
+
+								else {
+									std::cout << "Failed to copy\n";
+								}
+							}
+
+							else if (choice == 'n') {
+								std::cout << "Cancelled operation\n";
+							}
+
+							else {
+								std::cout << "Invalid response\nCancelled operation\n";
+							}
+						}
+						else {
+							goto bandaid_fix;
+						}
+					}
+
+					else {
+						std::cout << "Invalid file\n";
+					}
+				}
+
+				else if (command == "read") {
+					std::string readPath;
+
+					std::cout << "Enter the path\n";
+					std::getline(std::cin, readPath);
+
+					if (std::filesystem::exists(readPath) && std::filesystem::is_regular_file(readPath)) {
+						std::ifstream readFile(readPath);
+
+						if (readFile.is_open()) {
+							std::string line;
+
+							while (std::getline(readFile, line)) {
+								std::cout << line << '\n';
+							}
+						}
+						else {
+							std::cout << "Failed to read file\n";
+						}
+					}
+
+					else {
+						std::cout << "Invalid file\n";
+					}
+				}
+
+				else if (command == "view") {
+					std::string viewPath; // TBD
+				}
+
+				else if (command == "write") {
+					std::string writeFile;
+					std::string reportText;
+
+					if (std::filesystem::exists(writeFile)) {
+						std::string writeText;
+
+						std::ofstream write(writeFile);
+						if (write.is_open()) {
+							std::getline(std::cin, writeText);
+							write << writeText;
+							write.close();
+
+							if (writeText.length() < 50) {
+								for (int i = 0; i < writeText.length(); i++) {
+									reportText += writeText[i];
+								}
+
+								std::cout << "Wrote " << reportText << " (" << writeText.length() - reportText.length() << " excluded)" << " to " << writeFile;
+							}
+
+							else {
+								std::cout << "Wrote " << writeText << " to " << writeFile;
+							}
+						}
+
+						else {
+							std::cout << "Failed to create file\n";
+						}
+					}
+
+					else {
+						std::cout << "File does not exist\n";
+					}
+
+				}
+
+				else if (command == "check") {
+					std::string checkFile;
+
+					std::getline(std::cin, checkFile);
+
+					if (std::filesystem::exists(checkFile)) {
+						std::cout << checkFile << " exists\n";
+					}
+
+					else {
+						std::cout << checkFile << " does not exist\n";
+					}
+				}
+
+				else if (command == "exit") {
+					break;
+				}
+
+				else {
+					std::cout << "Invalid syntax\n";
+				}
+			}
+		}
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// can never see the split otherwise
         void letterFrequency() {
             std::string user_input;
             std::string txt;
@@ -126,7 +359,7 @@ class generic {
             std::cout << "Enter the maximum number\n";
             std::cin >> max;
             std::cout << "Enter the minimum number\n";
-            std::cin >> min; 
+            std::cin >> min;
 
             return rand() % (max - min + 1) + min;
         }
@@ -134,8 +367,8 @@ class generic {
         void run() {
             std::string choice;
 
-            while (true) { 
-                std::cout << "Enter a command (help for list)\n";
+            while (true) {
+                std::cout << "> ";
                 std::getline(std::cin, choice);
                 std::transform(choice.begin(), choice.end(), choice.begin(), [](unsigned char c) { return std::tolower(c); });
 
@@ -252,8 +485,8 @@ class generic {
                         for (const auto& file : std::filesystem::directory_iterator(pathList)) {
                             std::cout << file << '\n';
                         }
-                    } 
-                    
+                    }
+
                     else {
                         std::cout << "Not a directory\n";
                     }
@@ -293,19 +526,24 @@ class generic {
                             std::cout << "Deletion cancelled\n";
                         }
                     }
-                    
+
                     else {
                         std::cout << "Unable to find file\n";
                     }
-                    std::filesystem::remove(delpath);  
+                    std::filesystem::remove(delpath);
+                }
+
+                else if (choice == "file") {
+                    std::cout << "Type exit to exit file management mode\n";
+                    fileManage();
                 }
 
                 else if (choice == "exit") {
                     break;
                 }
-                 
+
                 else {
-                    std::cout << "Invalid command\n";
+                    std::cout << "Invalid command, type help for a list\n";
                 }
             }
         }
