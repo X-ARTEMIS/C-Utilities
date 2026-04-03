@@ -85,11 +85,10 @@ class generic {
 
         void bubbleSort() {
             int temp;
-            bool inputting = true;
 
             std::vector<int> array; // array but vector
 
-            while (inputting) {
+            while (true) {
                 std::cout << "Enter your numbers (0 for exit)\n";
                 std::cin >> temp;
                 if (temp != 0) {
@@ -98,7 +97,6 @@ class generic {
 
                 else {
                     break;
-                    inputting = false; // I think break works in while loops
                 }
 
             }
@@ -121,11 +119,10 @@ class generic {
         }
 
         int random() {
-            int random = 0;
             int max;
             int min;
 
-            srand(time(nullptr));
+            srand(static_cast<unsigned int>(time(nullptr)));
             std::cout << "Enter the maximum number\n";
             std::cin >> max;
             std::cout << "Enter the minimum number\n";
@@ -136,9 +133,8 @@ class generic {
 
         void run() {
             std::string choice;
-            bool running = true;
 
-            while (running) { 
+            while (true) { 
                 std::cout << "Enter a command (help for list)\n";
                 std::getline(std::cin, choice);
                 std::transform(choice.begin(), choice.end(), choice.begin(), [](unsigned char c) { return std::tolower(c); });
@@ -281,7 +277,7 @@ class generic {
                     if (std::filesystem::exists(delpath)) {
                         std::cout << "Are you sure you wish to delete " << delpath << " (Y/N)" << '\n';
                         std::cin >> delChoice;
-                        delChoice = std::tolower(static_cast<unsigned char>(delChoice));
+                        delChoice = static_cast<char>(std::tolower(static_cast<unsigned char>(delChoice)));
                         if (delChoice == 'y') {
                             std::filesystem::remove(delpath);
                             if (!std::filesystem::exists(delpath)) {
@@ -305,7 +301,7 @@ class generic {
                 }
 
                 else if (choice == "exit") {
-                    running = false;
+                    break;
                 }
                  
                 else {
@@ -317,9 +313,9 @@ class generic {
 
 int main() {
     std::cout << "C++ Utilities\n";
-    std::cout << "===================================================";
+    std::cout << "==============================\n";
     generic main;
     main.run();
-    std::cout << "===================================================";
+    std::cout << "==============================\n";
     return 0;
 }
