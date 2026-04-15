@@ -26,14 +26,13 @@ public:
             std::string command;
             std::cout << "* ";
             std::cin >> command;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
             if (command == "new") {
                 std::string newPath;
                 char choice;
 
                 std::cout << "Enter your new path\n";
-                std::getline(std::cin, newPath);
+                std::getline(std::cin >> std::ws, newPath);
 
                 if (std::filesystem::exists(newPath)) {
                     std::cout << "File already exists, this will cause undefined behavior. Are you sure you wish to continue? (Y/N) \n"; // I broke this somehow
@@ -65,7 +64,7 @@ public:
             else if (command == "delete") {
                 std::string delpath;
                 char areYouSureAboutThat;
-                std::getline(std::cin, delpath);
+                std::getline(std::cin >> std::ws, delpath);
 
                 if (std::filesystem::exists(delpath)) {
                     std::cout << "Are you sure you would like to delete " << delpath << " (Y/N)\n";
@@ -101,7 +100,7 @@ public:
                 if (std::filesystem::exists(path)) {
                     if (std::filesystem::is_regular_file(path)) {
                         std::cout << "Enter a target path";
-                        std::getline(std::cin, targetPath);
+                        std::getline(std::cin >> std::ws, targetPath);
                         std::filesystem::copy(path, targetPath);
 
                         if (std::filesystem::exists(targetPath)) {
@@ -129,11 +128,11 @@ public:
                 char choice;
 
                 std::cout << "Enter the path of the file you wish to move\n";
-                std::getline(std::cin, cutFile);
+                std::getline(std::cin >> std::ws, cutFile);
 
                 if (std::filesystem::exists(cutFile) && std::filesystem::is_regular_file(cutFile)) {
                     std::cout << "Enter the target path\n";
-                    std::getline(std::cin, cutFileTarget);
+                    std::getline(std::cin >> std::ws, cutFileTarget);
 
                     if (!std::filesystem::exists(cutFileTarget)) {
                     bandaid_fix:
@@ -201,7 +200,7 @@ public:
             }
 
             else if (command == "view") {
-                std::string viewPath; // TBD
+                std::string viewPath; // TBD eventually...
             }
 
             else if (command == "write") {
@@ -213,7 +212,7 @@ public:
 
                     std::ofstream write(writeFile);
                     if (write.is_open()) {
-                        std::getline(std::cin, writeText);
+                        std::getline(std::cin >> std::ws, writeText);
                         write << writeText;
                         write.close();
 
@@ -244,7 +243,7 @@ public:
             else if (command == "check") {
                 std::string checkFile;
 
-                std::getline(std::cin, checkFile);
+                std::getline(std::cin >> std::ws, checkFile);
 
                 if (std::filesystem::exists(checkFile)) {
                     std::cout << checkFile << " exists\n";
@@ -293,7 +292,7 @@ public:
         std::cout << "Letter Frequency Detector" << '\n';
         std::cout << "Enter your message" << '\n';
 
-        getline(std::cin, user_input);
+        getline(std::cin >> std::ws, user_input);
 
         std::transform(user_input.begin(), user_input.end(), user_input.begin(),
             [](unsigned char c) { return std::tolower(c); });
@@ -312,14 +311,13 @@ public:
         }
         std::cout << "Do you wish to save this to a text file? (y/n)\n";
         std::cin >> txt;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::transform(txt.begin(), txt.end(), txt.begin(), [](unsigned char c) { return std::tolower(c); });
         if (txt == "y") {
             char* userProfile = nullptr;
             size_t len = 0;
-            if (_dupenv_s(&userProfile, &len, "USERPROFILE") == 0 && userProfile != nullptr) {
+            if (_dupenv_s(&userProfile, &len, "USERPROFILE") == 0 && userProfile != nullptr) { // spaghetti
                 std::cout << "Enter a name for your file\n";
-                std::getline(std::cin, letterfreqfile);
+                std::getline(std::cin >> std::ws, letterfreqfile);
                 std::string path = std::string(userProfile) + "\\Downloads\\frequency_" + letterfreqfile + ".txt";
                 std::ofstream file(path);
 
@@ -341,14 +339,14 @@ public:
         }
 
         else {
-            std::cerr << "bye";
+            std::cout << "bye";
         }
     }
 
     void bubbleSort() {
         int temp;
 
-        std::vector<int> array; // array but vector
+        std::vector<int> array; // array but vector (don't ask questions)
 
         while (true) {
             std::cout << "Enter your numbers (0 for exit)\n";
@@ -398,7 +396,7 @@ public:
 
         while (true) {
             std::cout << "> ";
-            std::getline(std::cin, choice);
+            std::getline(std::cin >> std::ws, choice);
             std::transform(choice.begin(), choice.end(), choice.begin(), [](unsigned char c) { return std::tolower(c); });
 
             if (choice == "bubble") {
@@ -422,12 +420,10 @@ public:
                 text.clear();
                 textReport.clear();
                 std::cout << "Enter the name for your txt\n";
-                std::getline(std::cin, fileName);
-                std::cin.clear();
+                std::getline(std::cin >> std::ws, fileName);
                 std::ofstream File(fileName + ".txt");
                 std::cout << "Enter your text\n";
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::getline(std::cin, text);
+                std::getline(std::cin >> std::ws, text);
 
                 for (size_t i = 0; i < text.length(); i++) {
                     formatted += text[i];
