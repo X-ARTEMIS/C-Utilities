@@ -16,7 +16,7 @@ public:
         // help template NAME\nPARAMETERS {e}\nDdescription\n\n optionally additional info after description but ensure double \n at end ADDITIONAL INFORMATION
     } help1;
 
-    struct {
+    struct { // I'll write these eventually
 
     } help2;
 
@@ -391,6 +391,38 @@ public:
         return rand() % (max - min + 1) + min;
     }
 
+    double calculator() {
+        double number1;
+        char mathOperator;
+        double number2;
+        double answer;
+
+        std::cout << "Enter your first number\n";
+        std::cin >> number1;
+
+        std::cout << "Enter your operator\n";
+        std::cin >> mathOperator;
+
+        std::cout << "Enter your second number\n";
+        std::cin >> number2;
+
+        switch(mathOperator) {
+            case '+':
+                answer = number1 + number2;
+            
+            case '-':
+                answer = number1 - number2;
+            
+            case '*':
+                answer = number1 * number2;
+            
+            case '/':
+                answer = number1 / number2;
+        }
+
+        return answer;
+    }
+
     void run() {
         std::string choice;
 
@@ -459,6 +491,10 @@ public:
             else if (choice == "file") {
                 std::cout << "Type exit to exit file management mode\n";
                 fileManage();
+            }
+
+            else if (choice == "calculator") {
+                std::cout << calculator << '\n';
             }
 
             else if (choice == "exit") {
