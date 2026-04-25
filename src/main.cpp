@@ -521,5 +521,4 @@ int main() {
     generic main;
     main.run();
     std::cout << "==============================\n";
-    return 0;
 }
