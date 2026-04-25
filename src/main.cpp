@@ -9,9 +9,6 @@
 #include <ctime>
 #include <vector>
 
-
-class generic {
-public:
     struct {
         // help template NAME\nPARAMETERS {e}\nDdescription\n\n optionally additional info after description but ensure double \n at end ADDITIONAL INFORMATION
     } help1;
@@ -513,12 +510,10 @@ public:
             }
         }
     }
-};
 
 int main() {
     std::cout << "C++ Utilities\n";
     std::cout << "==============================\n";
-    generic main;
-    main.run();
+    run();
     std::cout << "==============================\n";
 }
