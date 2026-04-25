@@ -409,15 +409,22 @@ public:
         switch(mathOperator) {
             case '+':
                 answer = number1 + number2;
+                break;
             
             case '-':
                 answer = number1 - number2;
+                break;
             
             case '*':
                 answer = number1 * number2;
+                break;
             
             case '/':
                 answer = number1 / number2;
+                break;
+            
+            default:
+                std::cout << "Invalid operator\n";
         }
 
         return answer;
